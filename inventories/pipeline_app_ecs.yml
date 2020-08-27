@@ -1,0 +1,8 @@
+python_path: /Users/eshiji/repos/troposphere-templates/venv/bin
+python_env: dev
+python_script_name: "pipeline_app_ecs"
+python_script_path: /Users/eshiji/repos/troposphere-templates/src
+
+aws_s3_bucket_name: troposphere-generated-templates
+aws_s3_bucket_region: us-east-1
+aws_local_profile: lasandbox

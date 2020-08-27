@@ -1,0 +1,20 @@
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  roles:
+    - role: network
+  tags: [ config, network, megazord ]
+
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  roles:
+    - role: ecs_fargate
+  tags: [ ecs_fargate, megazord ]
+
+- hosts: localhost
+  connection: local
+  gather_facts: yes
+  roles:
+    - role: ecs_service
+  tags: [ ecs_service, megazord ]

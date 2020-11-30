@@ -1,0 +1,51 @@
+---
+- name: Include default environment static vars
+  include_vars: ../../inventories/default.yml
+  
+- name: Include environment static vars
+  include_vars: ../../inventories/s3_cloudfront.yml
+
+- name: Create temporary template file
+  tempfile:
+    state: file
+    suffix: tmp_template.yml
+  register: tmp_template_path
+
+- name: Generate template
+  environment: 
+    PYTHON_ENV: "{{ python_env }}"
+  shell: "{{ python_path }}/python {{ python_script_path }}/s3_cloudfront.py > tmp_template_path.path"
+
+- debug: 
+    var: tmp_template_path.path
+
+- name: Show template
+  shell: cat tmp_template_path.path
+
+- name: Upload template to s3 cf templates
+  aws_s3:
+    profile: "{{ aws_local_profile }}"
+    bucket: "{{ aws_s3_cf_templates }}"
+    mode: put
+    src: tmp_template_path.path
+    object: "{{ python_script_name }}.yaml"
+    expiration: 1800
+  register: uploaded_cf_template
+
+- debug: 
+    var: uploaded_cf_template.url
+
+- name: Deploy s3_cloudfront stack
+  cloudformation:
+    profile: "{{ aws_local_profile }}"
+    region: "{{ aws_region }}"
+    stack_name: "ansible-{{ project_name }}-{{ service_name }}"
+    state: present
+    template_url: "{{ uploaded_cf_template.url }}"
+
+- name: Upload static content to s3 bucket
+  s3_sync:
+    bucket: "{{ static_content_bucket_name }}"
+    file_root: "{{ static_content_dir }}"
+    profile: "{{ aws_local_profile }}"
+...

@@ -1,0 +1,116 @@
+Description: >-
+  This template is generated with pythonusing troposphere framework to createdynamic
+  Cloudfront templates withdifferent vars according to thePYTHON_ENV environment variable
+  fornetwork resources creation.
+Outputs:
+  BucketName:
+    Description: Name of S3 bucket to hold website content
+    Value: !Ref 'S3Bucket'
+  DistributionId:
+    Value: !Ref 'myDistribution'
+  DistributionName:
+    Value: !Join
+      - ''
+      - - http://
+        - !GetAtt 'myDistribution.DomainName'
+Resources:
+  BucketPolicy:
+    Properties:
+      Bucket: !Ref 'S3Bucket'
+      PolicyDocument:
+        Statement:
+          - Action:
+              - s3:GetObject
+              - s3:ListBucket
+            Effect: Allow
+            Principal:
+              CanonicalUser: !GetAtt 'CFOriginAccessIdentity.S3CanonicalUserId'
+            Resource:
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref 'S3Bucket'
+                  - /*
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref 'S3Bucket'
+            Sid: Allow-cf
+    Type: AWS::S3::BucketPolicy
+  CFOriginAccessIdentity:
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: !Join
+          - ' '
+          - - Cloudfront Origin Access Identity
+            - demo-s3-cloudfront
+            - dev
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+  S3Bucket:
+    Properties:
+      AccessControl: Private
+      BucketName: !Join
+        - '-'
+        - - demo-s3-cloudfront
+          - dev
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: 'true'
+        BlockPublicPolicy: 'true'
+        IgnorePublicAcls: 'true'
+        RestrictPublicBuckets: 'true'
+      Tags:
+        - Key: Name
+          Value: demo-s3-cloudfront
+        - Key: ProjectName
+          Value: demo-troposphere-s3-cloudfront
+        - Key: env
+          Value: dev
+    Type: AWS::S3::Bucket
+  myDistribution:
+    Properties:
+      DistributionConfig:
+        CustomErrorResponses:
+          - ErrorCachingMinTTL: 0
+            ErrorCode: 404
+            ResponseCode: 200
+            ResponsePagePath: !Join
+              - ''
+              - - /
+                - index.html
+        DefaultCacheBehavior:
+          DefaultTTL: 0
+          ForwardedValues:
+            QueryString: 'false'
+          MaxTTL: 0
+          MinTTL: 0
+          TargetOriginId: !Join
+            - '-'
+            - - demo-s3-cloudfront
+              - dev
+          ViewerProtocolPolicy: allow-all
+        DefaultRootObject: index.html
+        Enabled: 'true'
+        HttpVersion: http2
+        Origins:
+          - DomainName: !GetAtt 'S3Bucket.DomainName'
+            Id: !Join
+              - '-'
+              - - demo-s3-cloudfront
+                - dev
+            S3OriginConfig:
+              OriginAccessIdentity: !Join
+                - /
+                - - origin-access-identity
+                  - cloudfront
+                  - !Ref 'CFOriginAccessIdentity'
+        ViewerCertificate:
+          CloudFrontDefaultCertificate: 'true'
+      Tags:
+        - Key: Name
+          Value: demo-s3-cloudfront
+        - Key: ProjectName
+          Value: demo-troposphere-s3-cloudfront
+        - Key: env
+          Value: dev
+    Type: AWS::CloudFront::Distribution
+

@@ -1,0 +1,4 @@
+troposphere>=2.6.1
+ansible
+boto3
+awacs

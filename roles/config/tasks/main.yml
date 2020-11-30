@@ -1,0 +1,23 @@
+---
+- name: Include default environment static vars
+  include_vars: ../../inventories/default.yml
+
+- name: Include config environment static vars
+  include_vars: ../../inventories/config.yml
+
+
+- name: Create s3 bucket for cf templates
+  aws_s3:
+    bucket: "{{ aws_s3_cf_templates }}"
+    mode: create
+    region: "{{ aws_region }}"
+    profile: "{{ aws_local_profile }}"
+
+- name: Create s3 bucket artifacts
+  s3_bucket:
+    name: "{{ aws_s3_artifacts }}"
+    state: present
+    region: "{{ aws_region }}"
+    profile: "{{ aws_local_profile }}"
+    versioning: yes
+...

@@ -1,0 +1,10 @@
+# Default variables
+project_name: demo
+service_name: s3-cloudfront
+env: dev
+
+# Pryhon script vars
+python_script_name: "s3_cloudfront"
+
+static_content_bucket_name: "{{ project_name}}-{{ service_name }}-{{ env }}"
+static_content_dir: "{{ playbook_dir }}/static_content/"

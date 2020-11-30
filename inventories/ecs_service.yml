@@ -1,0 +1,12 @@
+# Default variables
+project_name: demo
+service_name: ecs-service
+env: dev
+
+# Pryhon script vars
+python_script_name: "ecs_service"
+
+# Artifact
+zip_file_name: "{{ env }}-{{ project_name }}-{{ service_name }}.zip"
+
+

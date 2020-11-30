@@ -1,0 +1,8 @@
+# Default variables
+project_name: demo
+service_name: network
+env: dev
+
+# Pryhon script vars
+python_script_name: "network"
+

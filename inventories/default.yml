@@ -1,0 +1,14 @@
+# Pryhon script vars
+python_path: /Users/eshiji/repos/troposphere-templates/venv/bin
+python_env: "{{ env }}"
+python_script_path: /Users/eshiji/repos/troposphere-templates/src
+
+# AWS variables
+aws_region: us-east-1
+aws_s3_cf_templates: "{{ project_name }}-cf-templates"
+aws_local_profile: lasandbox
+aws_s3_artifacts: "{{ project_name }}-artifact-store"
+
+
+# Artifact
+source_code_folder: "/Users/eshiji/repos/app-demo"

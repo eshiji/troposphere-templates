@@ -1,0 +1,7 @@
+# Default variables
+project_name: demo
+service_name: ecs-fargate
+env: dev
+
+# Pryhon script vars
+python_script_name: "ecs_fargate"

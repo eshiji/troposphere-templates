@@ -1,0 +1,34 @@
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  roles:
+    - role: config
+  tags: [ config, demo ]
+
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  roles:
+    - role: network
+  tags: [ network, demo ]
+
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  roles:
+    - role: ecs_fargate
+  tags: [ ecs_fargate, demo ]
+
+- hosts: localhost
+  connection: local
+  gather_facts: yes
+  roles:
+    - role: ecs_service
+  tags: [ ecs_service, demo ]
+
+- hosts: localhost
+  connection: local
+  gather_facts: yes
+  roles:
+    - role: s3_cloudfront
+  tags: [ s3_cloudfront, demo ]

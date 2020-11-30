@@ -17,6 +17,7 @@ cd src/
 python network.py
 python ecs_fargate
 python ecs_service
+python s3_cloudfront.py
 ```
 
 ## Ansible

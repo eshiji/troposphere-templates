@@ -36,14 +36,19 @@ Network:
 ansible-playbook -vvv deploy.yml -e env=demo -t network
 ```
 
-ECS:
+ECS Cluster:
 ```
-ansible-playbook -vvv deploy.yml -t ecs_fargate
+ansible-playbook -vvv deploy.yml -e env=demo -t ecs_fargate
 ```
 
 ECS service:
 ```
-ansible-playbook -vvv deploy.yml -t ecs_service
+ansible-playbook -vvv deploy.yml -e env=demo -t ecs_service
+```
+
+S3 CLoudfront:
+```
+ansible-playbook -vvv deploy.yml -e env=demo -t s3_cloudfront
 ```
 
 
@@ -62,8 +67,10 @@ ansible-playbook -vvv deploy.yml -t ecs_service
 - 2 Nat Gateways
 - 2 Elastic IPs
 - 3 Route tables (1 public and 2 private)
+- Route for NAT GTW
+- Route for IGW
 
-**ECS**
+**ECS Cluster (Fargate)**
 - Application Load Balancer (ALB)
 - Security Group for ALB
 - Security Group for ECS services
@@ -80,3 +87,9 @@ ansible-playbook -vvv deploy.yml -t ecs_service
 - ECS service
 - Codebuild Project
 - Codepipeline
+
+**S3 Cloudfront**
+- S3
+- Cloudfront Distribution
+- OAI (Origin Access Identity)
+- S3 bucket policy

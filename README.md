@@ -20,14 +20,19 @@ python ecs_service
 ```
 
 ## Ansible
+Create buckets to store templates and artifacts(MUST run):
+``` 
+ansible-playbook -vvv deploy.yml -e env=demo -t demo
+```
+
 Running everything together in a new AWS account:
 ``` 
-ansible-playbook -vvv deploy.yml -t demo
+ansible-playbook -vvv deploy.yml -e env=demo -t demo
 ```
 
 Network:
 ```
-ansible-playbook -vvv deploy.yml -t network
+ansible-playbook -vvv deploy.yml -e env=demo -t network
 ```
 
 ECS:
